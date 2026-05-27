@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1 Tahun Bersama ❤️</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :root {
+    /* Palet Dark Mode Premium */
+    --bg-main:   #0d0709; 
+    --bg-card:   #1a1014; 
+    --text-main: #f5f5f7; 
+    --text-muted:#8a7a80; 
+    --rose:      #e84a68; 
+    --gold:      #d4af37; 
+    --border:    rgba(232, 74, 104, 0.15); 
+    
+    /* Variabel Font */
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans:  'Plus Jakarta Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── Custom Kursor ─── */
+  #cursor {
+    position: fixed; top: 0; left: 0; z-index: 9999; width: 8px; height: 8px;
+    background: var(--rose); border-radius: 50%; pointer-events: none;
+    transform: translate(-50%,-50%); transition: transform 0.1s ease;
+    box-shadow: 0 0 10px var(--rose);
+  }
+  #cursor-ring {
+    position: fixed; top: 0; left: 0; z-index: 9998; width: 32px; height: 32px;
+    border: 1.5px solid var(--rose); border-radius: 50%; pointer-events: none;
+    transform: translate(-50%,-50%); transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    opacity: 0.6;
+  }
+
+  /* ─── Floating Hearts ─── */
+  #hearts-canvas {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  }
+
+  /* ─── Hero Section ─── */
+  #hero {
+    position: relative; z-index: 1; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem;
+    background: linear-gradient(180deg, #120a0c 0%, var(--bg-main) 100%);
+    overflow: hidden; max-width: 100% !important; width: 100%;
+  }
+
+  #matrix-canvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 0.85;
+  }
+
+  #hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(232, 74, 104, 0.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 1;
+  }
+
+  .hero-date, .hero-title, .hero-sub, .scroll-hint { position: relative; z-index: 2; }
+
+  .hero-date {
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem; opacity: 0;
+    animation: fadeUp 1.2s 0.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 8vw, 7rem); font-weight: 500; letter-spacing: -0.01em;
+    line-height: 1.05; color: #ffffff; max-width: 1100px; opacity: 0;
+    animation: fadeUp 1.2s 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+
+  .hero-title span {
+    display: block; font-family: var(--font-sans);
+    font-size: clamp(1rem, 2.2vw, 1.3rem); font-weight: 300;
+    letter-spacing: 0.05em; color: var(--text-muted); margin-top: 2rem; line-height: 1.5;
+  }
+
+  .hero-sub {
+    margin-top: 4rem; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--rose); opacity: 0;
+    animation: fadeUp 1.2s 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); opacity: 0;
+    animation: fadeUp 1.2s 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .scroll-hint::after {
+    content: ''; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: lineGrow 2s infinite;
+  }
+
+  /* ─── Komponen Shared ─── */
+  section { position: relative; z-index: 1; padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 5rem; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 500; letter-spacing: -0.01em;
+    color: var(--text-main); line-height: 1.15;
+  }
+
+  /* ─── Galeri Komponen ─── */
+  #gallery { max-width: 100%; background: var(--bg-main); }
+  
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 240px; gap: 20px;
+    max-width: 1140px; margin: 0 auto; padding: 0 1rem;
+  }
+
+  .g-item {
+    border-radius: 20px; overflow: hidden; position: relative; cursor: none;
+    background: var(--bg-card); border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transform: translateY(40px); opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease, box-shadow 0.3s ease, border 0.3s;
+  }
+  .g-item.visible { transform: translateY(0); opacity: 1; }
+  .g-item:hover { 
+    box-shadow: 0 20px 50px rgba(232, 74, 104, 0.15); 
+    border: 1px solid rgba(232, 74, 104, 0.4);
+  }
+
+  .g-item:nth-child(1)  { grid-column: span 5; grid-row: span 2; }
+  .g-item:nth-child(2)  { grid-column: span 4; }
+  .g-item:nth-child(3)  { grid-column: span 3; }
+  .g-item:nth-child(4)  { grid-column: span 7; }
+  .g-item:nth-child(5)  { grid-column: span 3; grid-row: span 2; }
+  .g-item:nth-child(6)  { grid-column: span 4; }
+  .g-item:nth-child(7)  { grid-column: span 5; }
+  .g-item:nth-child(8)  { grid-column: span 4; grid-row: span 2; }
+  .g-item:nth-child(9)  { grid-column: span 8; }
+  .g-item:nth-child(10) { grid-column: span 4; }
+
+  .g-item img {
+    width: 100%; height: 100%; object-fit: cover; display: block; 
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .g-item:hover img { transform: scale(1.03); }
+
+  /* ─── Timeline Komponen ─── */
+  #timeline { max-width: 100%; background: linear-gradient(180deg, var(--bg-main) 0%, #160a0d 100%); }
+  
+  .tl-wrap { position: relative; max-width: 800px; margin: 0 auto; padding: 2rem 0; }
+  .tl-wrap::before {
+    content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, transparent 0%, var(--rose) 15%, var(--rose) 85%, transparent 100%);
+    transform: translateX(-50%); opacity: 0.3;
+  }
+
+  .tl-item {
+    position: relative; width: 44%; margin-bottom: 5rem;
+    opacity: 0; transform: translateX(-30px);
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .tl-item.visible { opacity: 1; transform: translateX(0); }
+  .tl-item:nth-child(even) { margin-left: 56%; transform: translateX(30px); }
+  .tl-item:nth-child(even).visible { transform: translateX(0); }
+
+  .tl-dot {
+    position: absolute; top: 0.5rem; width: 12px; height: 12px;
+    background: var(--rose); border-radius: 50%;
+    box-shadow: 0 0 0 5px var(--bg-main), 0 0 15px var(--rose);
+  }
+  .tl-item:nth-child(odd) .tl-dot  { right: -14.5%; }
+  .tl-item:nth-child(even) .tl-dot { left: -14.5%; }
+
+  .tl-content {
+    background: var(--bg-card); padding: 2rem; border-radius: 20px;
+    border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  .tl-content:hover { border-color: rgba(232, 74, 104, 0.4); box-shadow: 0 15px 40px rgba(232, 74, 104, 0.1); }
+  .tl-month { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  
+  .tl-event { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.6rem; }
+  .tl-desc { font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); font-weight: 300; }
+
+  /* ─── Countdown ─── */
+  #countdown { max-width: 100%; text-align: center; background: linear-gradient(135deg, #160a0d 0%, var(--bg-main) 100%); }
+  
+  .cd-grid { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+  .cd-box {
+    display: flex; flex-direction: column; align-items: center;
+    background: rgba(26, 16, 20, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(232, 74, 104, 0.2); border-radius: 24px; padding: 2rem 2.5rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.02);
+    min-width: 140px; flex: 1; max-width: 180px; transition: transform 0.3s, border 0.3s;
+  }
+  .cd-box:hover { transform: translateY(-5px); border-color: var(--rose); }
+  .cd-num { font-size: 3.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--text-main); text-shadow: 0 0 15px rgba(255,255,255,0.1); }
+  .cd-unit { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); margin-top: 0.8rem; }
+
+  /* ─── Love Letter Komponen ─── */
+  #letter { max-width: 100%; background: var(--bg-main); color: white; }
+  .letter-wrap {
+    max-width: 760px; margin: 0 auto; padding: 4.5rem 3rem;
+    background: linear-gradient(180deg, rgba(26,16,20,0.8) 0%, rgba(13,7,9,0.9) 100%);
+    border: 1px solid rgba(232, 74, 104, 0.2); border-radius: 28px; position: relative; text-align: center;
+    backdrop-filter: blur(10px); box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  }
+  .letter-wrap::before, .letter-wrap::after { content: '✦'; position: absolute; font-size: 1rem; color: var(--gold); opacity: 0.4; }
+  .letter-wrap::before { top: 2rem; left: 2.5rem; }
+  .letter-wrap::after  { bottom: 2rem; right: 2.5rem; }
+
+  .letter-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose); margin-bottom: 2.5rem; }
+  
+  .letter-text {
+    font-family: var(--font-serif); font-size: clamp(1.2rem, 2.2vw, 1.5rem); font-weight: 400; line-height: 1.85;
+    color: rgba(255,255,255,0.9); margin-bottom: 3rem; text-align: justify; text-justify: inter-word;
+  }
+  .letter-sign { font-family: var(--font-serif); font-style: italic; font-size: 1.8rem; font-weight: 500; color: var(--rose); }
+
+  .letter-text[contenteditable="true"]:focus {
+    outline: none; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 14px; box-shadow: 0 0 0 1px var(--rose);
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    max-width: 100%; background: #050203; color: rgba(255,255,255,0.3);
+    text-align: center; padding: 4rem 2rem; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  footer .heart { color: var(--rose); display: inline-block; animation: pulse 1.4s infinite ease-in-out; text-shadow: 0 0 10px var(--rose); }
+
+  /* ─── Lightbox ─── */
+  #lightbox {
+    position: fixed; inset: 0; z-index: 1000; background: rgba(5,2,3,0.95);
+    display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease; backdrop-filter: blur(15px);
+  }
+  #lightbox.open { opacity: 1; pointer-events: all; }
+  #lightbox img { max-width: 85vw; max-height: 80vh; border-radius: 16px; box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1); }
+  #lb-close {
+    position: absolute; top: 2rem; right: 2.5rem; font-size: 1.5rem; color: white; cursor: none;
+    opacity: 0.5; transition: opacity 0.2s;
+  }
+  #lb-close:hover { opacity: 1; color: var(--rose); }
+
+  /* ─── Keyframes ─── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+  @keyframes lineGrow {
+    0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+    55% { transform-origin: bottom; }
+    100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(-105vh) scale(0.6) rotate(25deg); opacity: 0; }
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    section { padding: 5rem 1.5rem; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; gap: 12px; }
+    .g-item { grid-column: span 2 !important; grid-row: span 1 !important; border-radius: 14px; }
+    .tl-wrap::before { left: 16px; }
+    .tl-item { width: 100%; margin-left: 0 !important; margin-bottom: 3rem; transform: translateX(20px) !important; }
+    .tl-item.visible { transform: translateX(0) !important; }
+    .tl-dot { left: 11px !important; right: auto !important; top: 1.8rem; }
+    .tl-content { padding: 1.5rem 1.5rem 1.5rem 2.5rem; border-radius: 16px; }
+    .cd-grid { gap: 1rem; }
+    .cd-box { padding: 1.5rem; min-width: 45%; border-radius: 18px; }
+    .cd-num { font-size: 2.5rem; }
+    .letter-wrap { padding: 3rem 1.5rem; border-radius: 20px; }
+    #cursor, #cursor-ring { display: none; }
+    body { cursor: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="hearts-canvas"></canvas>
+
+<section id="hero">
+  <canvas id="matrix-canvas"></canvas>
+  <p class="hero-date">— Satu Tahun Penuh Cinta —</p>
+  <h1 class="hero-title">
+    Happy Anniversary
+    <span>Terima kasih telah menjadi bagian terindah dari hidupku</span>
+  </h1>
+  <p class="hero-sub">✦ &nbsp; 365 hari &nbsp; ✦ &nbsp; satu hati &nbsp; ✦</p>
+</section>
+
+<section id="gallery">
+  <div class="section-header">
+    <!-- <p class="section-label">Kenangan Kita</p> -->
+    <h2 class="section-title">Our Memory</h2>
+  </div>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="g-item"><img src="IMG_2361.JPG.jpeg" alt="Kenangan 1"></div>
+    <div class="g-item"><img src="IMG_2481.JPG.jpeg" alt="Kenangan 2"></div>
+    <div class="g-item"><img src="IMG_2545.JPG.jpeg" alt="Kenangan 3"></div>
+    <div class="g-item"><img src="FLQBCEKFcZoDoXv99eCh0VQvl0KhQDxIQMjHsEiX.jpg.jpeg" alt="Kenangan 4"></div>
+    <div class="g-item"><img src="IMG_5086.JPG.jpeg" alt="Kenangan 5"></div>
+    <div class="g-item"><img src="IMG_3327.JPG.jpeg" alt="Kenangan 6"></div>
+    <div class="g-item"><img src="7af46927-d1a7-454e-9a07-8f77018f69f8.png.jpeg" alt="Kenangan 7"></div>
+    <div class="g-item"><img src="IMG_0735.JPG.jpeg" alt="Kenangan 8"></div>
+    <div class="g-item"><img src="WYpYzV4YQuES6RnuOVGUFzmpL4MhIZ8QPs7Dwf9B.jpg.jpeg" alt="Kenangan 9"></div>
+    <div class="g-item"><img src="FN8zsZ88qAgBruuVbyosCVQXEyak72KbkzjLiT0P.jpg" alt="Kenangan 10"></div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="section-header">
+    <p class="section-label">Perjalanan Kita</p>
+    <h2 class="section-title">365 Hari Penuh Cerita</h2>
+  </div>
+
+  <div class="tl-wrap">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-month">Hari Pertama</p>
+        <p class="tl-event">Pertama Kali Bertemu</p>
+        <p class="tl-desc">Saat itu aku tidak tahu bahwa inilah awal dari sesuatu yang sangat indah dan berarti dalam hidupku.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-month">Bulan Pertama</p>
+        <p class="tl-event">First Date yang Tak Terlupakan</p>
+        <p class="tl-desc">Setiap detik bersama terasa begitu spesial, dan aku semakin yakin bahwa kamu adalah orangnya.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-month">3 Bulan Bersama</p>
+        <p class="tl-event">Petualangan Pertama</p>
+        <p class="tl-desc">Perjalanan yang mengajarkan kita betapa serunya menjelajahi dunia bersama orang yang tepat.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-month">6 Bulan Bersama</p>
+        <p class="tl-event">Melewati Badai Bersama</p>
+        <p class="tl-desc">Tantangan yang justru membuat kita semakin kuat dan semakin memahami satu sama lain.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-month">9 Bulan Bersama</p>
+        <p class="tl-event">Momen Paling Romantis</p>
+        <p class="tl-desc">Malam itu, di bawah langit berbintang, aku semakin yakin ingin menghabiskan waktu lebih banyak bersamamu.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-month">1 Tahun 🎉</p>
+        <p class="tl-event">Happy Anniversary, Sayangku!</p>
+        <p class="tl-desc">Satu tahun penuh tawa, air mata, cinta, dan keajaiban. Terima kasih sudah selalu ada untukku.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="countdown">
+  <div class="section-header">
+    <p class="section-label">Waktu Bersama</p>
+    <h2 class="section-title">Sudah Berapa Lama?</h2>
+  </div>
+  <div class="cd-grid">
+    <div class="cd-box"><span class="cd-num" id="cd-days">365</span><span class="cd-unit">Hari</span></div>
+    <div class="cd-box"><span class="cd-num" id="cd-hours">00</span><span class="cd-unit">Jam</span></div>
+    <div class="cd-box"><span class="cd-num" id="cd-min">00</span><span class="cd-unit">Menit</span></div>
+    <div class="cd-box"><span class="cd-num" id="cd-sec">00</span><span class="cd-unit">Detik</span></div>
+  </div>
+  <p style="margin-top:3.5rem;font-weight:500;font-size:1.1rem;letter-spacing:-0.01em;color:var(--rose);opacity:0.9">
+    …dan masih banyak lagi yang akan datang 💕
+  </p>
+</section>
+
+<section id="letter">
+  <div class="letter-wrap">
+    <p class="letter-label">Sebuah Surat Cinta</p>
+    <div class="letter-text" contenteditable="true" id="letterText">
+      Sayangku,<br><br>
+      Satu tahun sudah kita lalui bersama dengan segala tawa, tangis, dan cerita di antaranya. Kamu adalah hal terbaik yang pernah datang dalam hidupku walaupun bukan yang pertama. Setiap pagi lebih cerah karena ada kamu, setiap malam lebih hangat karena ada pelukmu.<br><br>
+      Terima kasih sudah mencintaiku apa adanya. Terima kasih sudah menjadi rumah yang selalu bisa aku pulang ke dalamnya. Di hari yang spesial ini, aku hanya ingin kamu tahu aku jatuh cinta padamu setiap harinya, lebih dalam dari hari sebelumnya.<br><br>
+      Semoga kita bisa terus saling mecintai selamanya. ❤️
+    </div>
+    <p class="letter-sign">— Love uuu oreooo —</p>
+  </div>
+</section>
+
+<footer>
+  <p>Dibuat dengan <span class="heart">♥</span> untuk kamu, satu-satunya.</p>
+  <p style="margin-top:0.8rem;opacity:0.4;font-size:0.7rem;letter-spacing:0.2em">Happy 1st Anniversary</p>
+</footer>
+
+<div id="lightbox">
+  <span id="lb-close">✕</span>
+  <img id="lb-img" src="">
+</div>
+
+<script>
+/* ─── Smooth Custom Cursor ─── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cur.style.left = mouseX + 'px'; cur.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.15;
+  ringY += (mouseY - ringY) * 0.15;
+  ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+/* ─── Animasi Matrix "LOVE" ─── */
+(function(){
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  const fontSize = 16;
+  let columns;
+  let drops = [];
+  const characters = "LOVElove♥".split("");
+  
+  function resize() {
+    W = canvas.width = canvas.parentElement.clientWidth;
+    H = canvas.height = canvas.parentElement.clientHeight;
+    columns = Math.floor(W / fontSize);
+    drops = [];
+    for(let x = 0; x < columns; x++) drops[x] = Math.floor(Math.random() * -25); 
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(13, 7, 9, 0.15)'; 
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#e84a68'; 
+    ctx.font = fontSize + "px 'Plus Jakarta Sans', sans-serif";
+    
+    for(let i = 0; i < drops.length; i++) {
+      const text = characters[Math.floor(Math.random() * characters.length)];
+      ctx.globalAlpha = Math.random() > 0.5 ? 0.8 : 0.3;
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      ctx.globalAlpha = 1.0;
+      if(drops[i] * fontSize > H && Math.random() > 0.97) drops[i] = 0; 
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 65);
+})();
+
+/* ─── Floating Hearts ─── */
+(function(){
+  const canvas = document.getElementById('hearts-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, hearts = [];
+
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  function Heart(){
+    this.x = Math.random() * W; this.y = H + 20;
+    this.size = 6 + Math.random() * 12; this.speed = 0.3 + Math.random() * 0.6;
+    this.opacity = 0.1 + Math.random() * 0.15;
+    this.drift = (Math.random() - 0.5) * 0.2; this.rot = (Math.random() - 0.5) * 0.02;
+    this.angle = 0;
+  }
+  Heart.prototype.draw = function(){
+    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+    ctx.globalAlpha = this.opacity; ctx.fillStyle = '#e84a68'; ctx.beginPath();
+    const s = this.size;
+    ctx.moveTo(0, s*0.35);
+    ctx.bezierCurveTo(-s*0.6, -s*0.1, -s*0.6, -s*0.7, 0, -s*0.35);
+    ctx.bezierCurveTo(s*0.6, -s*0.7, s*0.6, -s*0.1, 0, s*0.35);
+    ctx.fill(); ctx.restore();
+  };
+  Heart.prototype.update = function(){
+    this.y -= this.speed; this.x += this.drift; this.angle += this.rot;
+  };
+  function spawnIfNeeded(){ if(hearts.length < 20) hearts.push(new Heart()); }
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    hearts.forEach(h => { h.update(); h.draw(); });
+    hearts = hearts.filter(h => h.y > -30);
+    requestAnimationFrame(loop);
+  }
+  setInterval(spawnIfNeeded, 1000); loop();
+})();
+
+/* ─── Observer Reveal (Animasi Muncul) ─── */
+const revealEls = document.querySelectorAll('.g-item, .tl-item');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting){
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+revealEls.forEach(el => obs.observe(el));
+
+/* ─── Lightbox untuk Galeri Foto Permanen ─── */
+const lb = document.getElementById('lightbox'), lbImg = document.getElementById('lb-img');
+document.querySelectorAll('.g-item img').forEach(img => {
+  img.addEventListener('click', (e) => {
+    e.stopPropagation();
+    lbImg.src = img.src;
+    lb.classList.add('open');
+  });
+});
+document.getElementById('lb-close').addEventListener('click', () => lb.classList.remove('open'));
+lb.addEventListener('click', e => { if(e.target === lb) lb.classList.remove('open'); });
+
+/* ─── Countdown ─── */
+(function(){
+  const startDate = new Date(); startDate.setFullYear(startDate.getFullYear() - 1);
+  function update(){
+    const diff = Date.now() - startDate.getTime();
+    const days = Math.floor(diff / 86400000), hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000), secs = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = days;
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(mins).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(secs).padStart(2,'0');
+  }
+  update(); setInterval(update, 1000);
+})();
+
+/* ─── Click Sparkles (Efek Cinta Saat Diklik) ─── */
+document.addEventListener('click', e => {
+  if(e.target.tagName === 'INPUT' || e.target.closest('#lightbox')) return;
+  for(let i = 0; i < 6; i++){
+    const h = document.createElement('div');
+    h.style.cssText = `
+      position:fixed; left:${e.clientX}px; top:${e.clientY}px;
+      font-size:${14 + Math.random()*12}px; pointer-events:none; z-index:9997; transform:translate(-50%,-50%);
+      animation:floatUp ${0.6 + Math.random()*0.6}s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      color:#e84a68; opacity:0.9; text-shadow: 0 0 10px rgba(232, 74, 104, 0.8);
+    `;
+    h.textContent = ['❤','💕','💗','🌹','✨'][Math.floor(Math.random()*5)];
+    document.body.appendChild(h); setTimeout(() => h.remove(), 1200);
+  }
+});
+</script>
+</body>
+</html>
